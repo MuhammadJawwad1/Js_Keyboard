@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #wrapper {
+            max-width: 800px;
+            padding:20px 10px
+        }
+
+        #outputwrap {
+            width: 100%;
+            color: white;
+            background-color: #000000;
+            text-align: center;
+            font-weight: bolder;
+            font-size: xx-large;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #outputwrap * {
+            position: relative;
+            z-index: 5;
+        }
+
+        #outputwrap:after,
+        #outputwrap:before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: #130552;
+            position: absolute;
+            left: -100%;
+            top: 0;
+            z-index: 1;
+            transition: all 0.4s linear;
+        }
+
+        #outputwrap:before {
+            background-color: #cc0033;
+            right: -100%;
+            left: auto;
+            z-index: 2
+        }
+
+        #outputwrap:hover:after {
+            left: 0
+        }
+
+        #outputwrap:hover:before {
+            right: 0
+        }
+
+        #buttons-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .keyButton:hover,
+        .keyButton:focus {
+            color: white;
+            background-color: black;
+        }
+
+        .keyButton {
+            width: 90px;
+            margin: 5px;
+            padding: 12px 10px;
+            background-color: #130552;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function showElement(letter) {
+            var arrays = {
+                'A': ['Apple', 'Aeroplane', 'Ant', 'Antivirus', 'Anchor', 'Arrow', 'Artichoke', 'Apricot', 'Almond', 'Axe'],
+                'B': ['Ball', 'Banana', 'Bear', 'Butterfly', 'Box', 'Bus', 'Bicycle', 'Book', 'Bridge', 'Bee'],
+                'C': ['Cat', 'Car', 'Cake', 'Cup', 'Chair', 'Cloud', 'Candle', 'Cookie', 'Camera', 'Clock'],
+                'D': ['Dog', 'Duck', 'Diamond', 'Drum', 'Door', 'Dress', 'Dragon', 'Dice', 'Donut', 'Dolphin'],
+                'E': ['Elephant', 'Egg', 'Envelope', 'Eagle', 'Earth', 'Earring', 'Eggplant', 'Engine', 'Elf', 'Explosion'],
+                'F': ['Fish', 'Fox', 'Flower', 'Fan', 'Fire', 'Flag', 'Feather', 'Frog', 'Fork', 'Fence'],
+                'G': ['Giraffe', 'Grapes', 'Guitar', 'Globe', 'Gorilla', 'Glass', 'Ghost', 'Gift', 'Goat', 'Grass'],
+                'H': ['Horse', 'House', 'Hat', 'Hammer', 'Heart', 'Hand', 'Helicopter', 'Hippo', 'Hamburger', 'Hive'],
+                'I': ['Ice Cream', 'Island', 'Ink', 'Iron', 'Ice', 'Igloo', 'Ivy', 'Insect', 'Igloo', 'Iris'],
+                'J': ['Jaguar', 'Juice', 'Jellyfish', 'Jar', 'Jacket', 'Jewelry', 'Jester', 'Jigsaw', 'Jelly', 'Jade'],
+                'K': ['Kangaroo', 'Kite', 'Key', 'King', 'Koala', 'Kettle', 'Kangaroo', 'Kiwi', 'Keyboard', 'Ketchup'],
+                'L': ['Lion', 'Lemon', 'Laptop', 'Lamp', 'Leaf', 'Lollipop', 'Ladder', 'Llama', 'Lemonade', 'Lock'],
+                'M': ['Monkey', 'Mango', 'Moon', 'Mushroom', 'Milk', 'Mountains', 'Mermaid', 'Mitten', 'Muffin', 'Microphone'],
+                'N': ['Nest', 'Net', 'Notebook', 'Ninja', 'Nut', 'Nail', 'Noodles', 'Necklace', 'Newspaper', 'Nose'],
+                'O': ['Owl', 'Orange', 'Oxygen', 'Octopus', 'Ocean', 'Onion', 'Orchid', 'Oyster', 'Oar', 'Olive'],
+                'P': ['Penguin', 'Piano', 'Pencil', 'Pineapple', 'Panda', 'Pizza', 'Paint', 'Pear', 'Pillow', 'Pirate'],
+                'Q': ['Queen', 'Quilt', 'Quail', 'Question', 'Quill', 'Quartz', 'Quiver', 'Quiche', 'Queue', 'Quokka'],
+                'R': ['Rabbit', 'Rocket', 'Rainbow', 'Ring', 'Raccoon', 'Rose', 'Robot', 'Ribbon', 'Radio', 'Rice'],
+                'S': ['Snake', 'Sun', 'Star', 'Ship', 'Seahorse', 'Socks', 'Sword', 'Squirrel', 'Sandwich', 'Snowflake'],
+                'T': ['Tiger', 'Tree', 'Telephone', 'Turtle', 'Toucan', 'Teapot', 'Tent', 'Truck', 'Table', 'Tornado'],
+                'U': ['Umbrella', 'Unicorn', 'Uniform', 'Utensil', 'Uranus', 'Umpire', 'Underwear', 'Unicycle', 'Umbrella', 'Urchin'],
+                'V': ['Violin', 'Volcano', 'Vase', 'Vegetable', 'Van', 'Vulture', 'Vest', 'Vine', 'Velvet', 'Volleyball'],
+                'W': ['Whale', 'Watermelon', 'Watch', 'Wheel', 'Wolf', 'Wagon', 'Wand', 'Worm', 'Wallet', 'Wreath'],
+                'X': ['Xylophone', 'X-ray', 'Xenon', 'Xerox', 'Xylograph', 'Xylography', 'Xanthophyll', 'Xenophobia', 'Xenolith', 'Xenomorph'],
+                'Y': ['Yak', 'Yacht', 'Yogurt', 'Yo-yo', 'Yakitori', 'Yogurt', 'Yawn', 'Yak', 'Yarn', 'Yoga'],
+                'Z': ['Zebra', 'Zucchini', 'Zipper', 'Zoo', 'Zeppelin', 'Zombie', 'Zephyr', 'Zen', 'Zigzag', 'Zest']
+            };
+            let output = document.getElementById('output')
+            let randomNo = Math.floor(Math.random() * arrays[letter].length)
+            output.innerHTML = arrays[letter][randomNo]
+            console.log(letter);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="outputwrap">
+            <span id="output">Press a Button</span>
+        </div>
+    <div id="buttons-container">
+        <button class="keyButton" onclick="showElement('A')">A</button>
+        <button class="keyButton" onclick="showElement('B')">B</button>
+        <button class="keyButton" onclick="showElement('C')">C</button>
+        <button class="keyButton" onclick="showElement('D')">D</button>
+        <button class="keyButton" onclick="showElement('E')">E</button>
+        <button class="keyButton" onclick="showElement('F')">F</button>
+        <button class="keyButton" onclick="showElement('G')">G</button>
+        <button class="keyButton" onclick="showElement('H')">H</button>
+        <button class="keyButton" onclick="showElement('I')">I</button>
+        <button class="keyButton" onclick="showElement('J')">J</button>
+        <button class="keyButton" onclick="showElement('K')">K</button>
+        <button class="keyButton" onclick="showElement('L')">L</button>
+        <button class="keyButton" onclick="showElement('M')">M</button>
+        <button class="keyButton" onclick="showElement('N')">N</button>
+        <button class="keyButton" onclick="showElement('O')">O</button>
+        <button class="keyButton" onclick="showElement('P')">P</button>
+        <button class="keyButton" onclick="showElement('Q')">Q</button>
+        <button class="keyButton" onclick="showElement('R')">R</button>
+        <button class="keyButton" onclick="showElement('S')">S</button>
+        <button class="keyButton" onclick="showElement('T')">T</button>
+        <button class="keyButton" onclick="showElement('U')">U</button>
+        <button class="keyButton" onclick="showElement('V')">V</button>
+        <button class="keyButton" onclick="showElement('W')">W</button>
+        <button class="keyButton" onclick="showElement('X')">X</button>
+        <button class="keyButton" onclick="showElement('Y')">Y</button>
+        <button class="keyButton" onclick="showElement('Z')">Z</button>
+    </div>
+</body>
+
+</html>
